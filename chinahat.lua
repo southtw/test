@@ -5,13 +5,14 @@ local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local head = character:WaitForChild("Head")
 
+-- main config
 local hatConfig = {
     Enabled = true,
     Transparency = 0.5,
     Material = Enum.Material.Neon,
-    Color = Color3.fromRGB(255, 255, 255),
-    Size = Vector3.new(3, 0.3, 3),
-    Position = Vector3.new(0, 0.6, 0)
+    Color = Color3.fromRGB(255, 255, 255), 
+    Size = Vector3.new(3, 0.3, 3), 
+    Position = Vector3.new(0, 0.6, 0) -- recommend only change Y
 }
 
 for _, obj in ipairs(character:GetDescendants()) do
@@ -43,6 +44,7 @@ weld.Part1 = chinaHat
 weld.C0 = CFrame.new(hatConfig.Position)
 weld.Parent = chinaHat
 
+-- rgb
 local hue = 0
 local speed = 1
 
