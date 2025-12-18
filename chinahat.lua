@@ -1,3 +1,5 @@
+
+
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
@@ -5,14 +7,14 @@ local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local head = character:WaitForChild("Head")
 
--- main config
+-- config
 local hatConfig = {
     Enabled = true,
     Transparency = 0.5,
     Material = Enum.Material.Neon,
     Color = Color3.fromRGB(255, 255, 255), 
     Size = Vector3.new(3, 0.3, 3), 
-    Position = Vector3.new(0, 0.6, 0) -- recommend only change Y
+    Position = Vector3.new(0, 0.6, 0)
 }
 
 for _, obj in ipairs(character:GetDescendants()) do
