@@ -1,0 +1,130 @@
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+local enabled = false
+local fireInterval = 0.1
+
+-- paths
+local potionPaths = {
+    "Small Haste Potion",
+    "Small Luck Potion",
+    "Big Haste Potion",
+    "Big Luck Potion",
+    "Luck Of Greed ",
+    "Pot Of Greed"
+}
+
+-- gui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "nigger"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = playerGui
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 200, 0, 120)
+mainFrame.Position = UDim2.new(0.5, -100, 0.1, 0)
+mainFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+mainFrame.BorderSizePixel = 0
+mainFrame.Active = true
+mainFrame.Draggable = true
+mainFrame.Parent = screenGui
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 8)
+corner.Parent = mainFrame
+local title = Instance.new("TextLabel")
+title.Name = "Title"
+title.Size = UDim2.new(1, 0, 0, 35)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+title.BorderSizePixel = 0
+title.Text = "collect potion NIGGER"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextSize = 16
+title.Font = Enum.Font.GothamBold
+title.Parent = mainFrame
+local titleCorner = Instance.new("UICorner")
+titleCorner.CornerRadius = UDim.new(0, 8)
+titleCorner.Parent = title
+local toggleButton = Instance.new("TextButton")
+toggleButton.Name = "ToggleButton"
+toggleButton.Size = UDim2.new(0, 160, 0, 40)
+toggleButton.Position = UDim2.new(0.5, -80, 0, 50)
+toggleButton.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
+toggleButton.BorderSizePixel = 0
+toggleButton.Text = "OFF"
+toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleButton.TextSize = 18
+toggleButton.Font = Enum.Font.GothamBold
+toggleButton.Parent = mainFrame
+local buttonCorner = Instance.new("UICorner")
+buttonCorner.CornerRadius = UDim.new(0, 6)
+buttonCorner.Parent = toggleButton
+local statusLabel = Instance.new("TextLabel")
+statusLabel.Name = "Status"
+statusLabel.Size = UDim2.new(1, -20, 0, 20)
+statusLabel.Position = UDim2.new(0, 10, 0, 95)
+statusLabel.BackgroundTransparency = 1
+statusLabel.Text = "Status: Disabled"
+statusLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+statusLabel.TextSize = 12
+statusLabel.Font = Enum.Font.Gotham
+statusLabel.TextXAlignment = Enum.TextXAlignment.Left
+statusLabel.Parent = mainFrame
+
+-- fire proximity prompts
+local function fireProximityPrompts()
+    while enabled do
+        for _, potionName in ipairs(potionPaths) do
+            if not enabled then break end
+            
+            local potion = workspace:FindFirstChild(potionName)
+            if potion then
+                local main = potion:FindFirstChild("Main")
+                if main then
+                    local proximityPrompt = main:FindFirstChild("ProximityPrompt")
+                    if proximityPrompt and proximityPrompt:IsA("ProximityPrompt") then
+                        pcall(function()
+                            fireproximityprompt(proximityPrompt)
+                        end)
+                    end
+                end
+            end
+        end
+        task.wait(fireInterval)
+    end
+end
+
+-- toggle
+toggleButton.MouseButton1Click:Connect(function()
+    enabled = not enabled
+    
+    if enabled then
+        toggleButton.Text = "ON"
+        toggleButton.BackgroundColor3 = Color3.fromRGB(50, 220, 50)
+        statusLabel.Text = "Status: Active"
+        statusLabel.TextColor3 = Color3.fromRGB(50, 220, 50)
+        
+        task.spawn(fireProximityPrompts)
+    else
+        toggleButton.Text = "OFF"
+        toggleButton.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
+        statusLabel.Text = "Status: Disabled"
+        statusLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+    end
+end)
+
+toggleButton.MouseEnter:Connect(function()
+    if enabled then
+        toggleButton.BackgroundColor3 = Color3.fromRGB(60, 240, 60)
+    else
+        toggleButton.BackgroundColor3 = Color3.fromRGB(240, 60, 60)
+    end
+end)
+
+toggleButton.MouseLeave:Connect(function()
+    if enabled then
+        toggleButton.BackgroundColor3 = Color3.fromRGB(50, 220, 50)
+    else
+        toggleButton.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
+    end
+end)
