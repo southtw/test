@@ -1,0 +1,3 @@
+-- change the stairs (money wont add)
+local args = { 5020 }
+game:GetService("ReplicatedStorage"):WaitForChild("StairStep"):FireServer(unpack(args))
