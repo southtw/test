@@ -1,4 +1,4 @@
-local v0 = tonumber;
+local v0 = tonumber; --risen counterblox
 local v1 = string.byte;
 local v2 = string.char;
 local v3 = string.sub;
