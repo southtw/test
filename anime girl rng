@@ -1,100 +1,85 @@
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-local tpenabled = false
-local tpdelay = 0.1
-local enabled = false
-local fireInterval = 0.1
+--[[
+ .____                  ________ ___.    _____                           __                
+ |    |    __ _______   \_____  \\_ |___/ ____\_ __  ______ ____ _____ _/  |_  ___________ 
+ |    |   |  |  \__  \   /   |   \| __ \   __\  |  \/  ___// ___\\__  \\   __\/  _ \_  __ \
+ |    |___|  |  // __ \_/    |    \ \_\ \  | |  |  /\___ \\  \___ / __ \|  | (  <_> )  | \/
+ |_______ \____/(____  /\_______  /___  /__| |____//____  >\___  >____  /__|  \____/|__|   
+         \/          \/         \/    \/                \/     \/     \/                   
+          \_Welcome to LuaObfuscator.com   (Alpha 0.10.9) ~  Much Love, Ferib 
 
-local potionPaths = {
-    "Speed Of Lighting",
-    "Small Haste Potion",
-    "Small Luck Potion",
-    "Big Haste Potion",
-    "Big Luck Potion",
-    "Luck Of Greed ",
-    "Pot Of Greed"
-}
+]]--
 
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
-
-local Window = Library.CreateLib("Anime huzz rng", "DarkTheme")
-
-local MainTab = Window:NewTab("Main")
-local MainSection = MainTab:NewSection("Automation")
-
-local function fireProximityPrompts()
-    while enabled do
-        for _, potionName in ipairs(potionPaths) do
-            if not enabled then break end
-            
-            local potion = workspace:FindFirstChild(potionName)
-            if potion then
-                local main = potion:FindFirstChild("Main")
-                if main then
-                    local proximityPrompt = main:FindFirstChild("ProximityPrompt")
-                    if proximityPrompt and proximityPrompt:IsA("ProximityPrompt") then
-                        pcall(function()
-                            fireproximityprompt(proximityPrompt)
-                        end)
-                    end
-                end
-            end
-        end
-        task.wait(fireInterval)
-    end
+local v0 = game:GetService("Players");
+local v1 = v0.LocalPlayer;
+local v2 = v1.Character or v1.CharacterAdded:Wait();
+local v3 = v2:WaitForChild("HumanoidRootPart");
+local v4 = false;
+local v5 = 0.1;
+local v6 = false;
+local v7 = 0.1;
+local v8 = {"Speed Of Lighting","Small Haste Potion","Small Luck Potion","Big Haste Potion","Big Luck Potion","Luck Of Greed ","Pot Of Greed"};
+local v9 = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))();
+local v10 = v9.CreateLib("Anime huzz rng", "DarkTheme");
+local v11 = v10:NewTab("Main");
+local v12 = v11:NewSection("Automation");
+local function v13()
+	while v6 do
+		for v23, v24 in ipairs(v8) do
+			if not v6 then
+				break;
+			end
+			local v25 = workspace:FindFirstChild(v24);
+			if v25 then
+				local v28 = v25:FindFirstChild("Main");
+				if v28 then
+					local v31 = v28:FindFirstChild("ProximityPrompt");
+					if (v31 and v31:IsA("ProximityPrompt")) then
+						pcall(function()
+							fireproximityprompt(v31);
+						end);
+					end
+				end
+			end
+		end
+		task.wait(v7);
+	end
 end
-
-MainSection:NewToggle("Collect Potions", "Automatically collects all potions", function(state)
-    enabled = state
-    
-    if enabled then
-        task.spawn(fireProximityPrompts)
-    else
-    end
-end)
-
-local function atp()
-    while tpenabled do
-        local success, err = pcall(function()
-            local target = workspace.s.Part36
-            local proximityPrompt = target.ProximityPrompt
-            
-            if target and proximityPrompt then
-
-                humanoidRootPart.CFrame = target.CFrame
-
-                task.wait(0.05)
-
-                fireproximityprompt(proximityPrompt)
-
-                task.wait(farmDelay)
-            end
-        end)
-        
-        if not success then
-            task.wait(1)
-        end
-    end
+v12:NewToggle("Collect Potions", "Automatically collects all potions", function(v17)
+	v6 = v17;
+	if v6 then
+		task.spawn(v13);
+	else
+	end
+end);
+local function v14()
+	while v4 do
+		local v21, v22 = pcall(function()
+			local v26 = workspace.s.Part36;
+			local v27 = v26.ProximityPrompt;
+			if (v26 and v27) then
+				v3.CFrame = v26.CFrame;
+				task.wait(0.05);
+				fireproximityprompt(v27);
+				task.wait(farmDelay);
+			end
+		end);
+		if not v21 then
+			task.wait(1);
+		end
+	end
 end
-
-MainSection:NewToggle("Orb Luck", "Automatically orb luck", function(state)
-    tpenabled = state
-    
-    if tpenabled then
-        spawn(atp)
-    else
-    end
-end)
-
-local SettingsTab = Window:NewTab("Settings")
-local SettingsSection = SettingsTab:NewSection("Configuration")
-
-SettingsSection:NewSlider("Collection Speed", "Adjust delay between collections", 1, 0.01, function(value)
-    fireInterval = value
-end)
-
-SettingsSection:NewSlider("TP Delay", "Adjust delay between tp cycles", 1, 0.1, function(value)
-    farmDelay = value / 10
-end)
+v12:NewToggle("Orb Luck", "Automatically orb luck", function(v18)
+	v4 = v18;
+	if v4 then
+		spawn(v14);
+	else
+	end
+end);
+local v15 = v10:NewTab("Settings");
+local v16 = v15:NewSection("Configuration");
+v16:NewSlider("Collection Speed", "Adjust delay between collections", 1, 0.01, function(v19)
+	v7 = v19;
+end);
+v16:NewSlider("TP Delay", "Adjust delay between tp cycles", 1, 0.1, function(v20)
+	farmDelay = v20 / 10;
+end);
