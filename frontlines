@@ -1,0 +1,218 @@
+local v0 = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))();
+local v1 = {HitboxSize=Vector3.new(1433 - (630 + 793), 33 - 23, 1 + 9),Transparency=(2 - 1),Notifications=false,ESPEnabled=true,HitboxEnabled=true,ESPBoxes=true,ESPNames=false,ESPTracers=false,ESPColor=Color3.fromRGB(255, 0 - 0, 6 - 2)};
+local v2 = os.clock();
+local v3 = loadstring(game:HttpGet("https://raw.githubusercontent.com/andrewc0de/Roblox/main/Dependencies/ESP.lua"))();
+v3:Toggle(v1.ESPEnabled);
+v3.Boxes = v1.ESPBoxes;
+v3.Names = v1.ESPNames;
+v3.Tracers = v1.ESPTracers;
+v3.Players = false;
+v3:AddObjectListener(workspace, {Name="soldier_model",Type="Model",Color=v1.ESPColor,PrimaryPart=function(v26)
+	local v27 = 0 + 0;
+	local v28;
+	while true do
+		if (v27 == (997 - (915 + 82))) then
+			v28 = nil;
+			repeat
+				local v76 = 0 - 0;
+				while true do
+					if ((766 - (745 + 21)) == v76) then
+						v28 = v26:FindFirstChild("HumanoidRootPart");
+						task.wait();
+						break;
+					end
+				end
+			until v28 
+			v27 = 1 + 0;
+		end
+		if (v27 == (1 - 0)) then
+			return v28;
+		end
+	end
+end,Validator=function(v29)
+	local v30 = 0 - 0;
+	while true do
+		if (v30 == (1188 - (1069 + 118))) then
+			return true;
+		end
+		if (v30 == (0 + 0)) then
+			task.wait(2 - 1);
+			if v29:FindFirstChild("friendly_marker") then
+				return false;
+			end
+			v30 = 4 - 3;
+		end
+	end
+end,CustomName="Enemy",IsEnabled="enemy"});
+v3.enemy = true;
+local function v12(v31)
+	if not v1.HitboxEnabled then
+		return;
+	end
+	local v32 = v31:FindFirstChild("HumanoidRootPart");
+	if not v32 then
+		return;
+	end
+	local v33 = v32.Position;
+	for v66, v67 in pairs(workspace:GetChildren()) do
+		if v67:IsA("BasePart") then
+			local v72 = 0 - 0;
+			local v73;
+			while true do
+				if (v72 == 0) then
+					v73 = (v67.Position - v33).Magnitude;
+					if (v73 <= (5 + 0)) then
+						local v79 = 0;
+						local v80;
+						while true do
+							if (v79 == (0 + 0)) then
+								v80 = 0 - 0;
+								while true do
+									if (v80 == (0 + 0)) then
+										v67.Transparency = v1.Transparency;
+										v67.Size = v1.HitboxSize;
+										break;
+									end
+								end
+								break;
+							end
+						end
+					end
+					break;
+				end
+			end
+		end
+	end
+end
+task.wait(792 - (368 + 423));
+for v34, v35 in pairs(workspace:GetDescendants()) do
+	if ((v35.Name == "soldier_model") and v35:IsA("Model") and not v35:FindFirstChild("friendly_marker")) then
+		v12(v35);
+	end
+end
+local function v13(v36)
+	task.wait(3 - 2);
+	if ((v36.Name == "soldier_model") and v36:IsA("Model") and not v36:FindFirstChild("friendly_marker")) then
+		local v70 = 0;
+		local v71;
+		while true do
+			if (v70 == (18 - (10 + 8))) then
+				v71 = 0;
+				while true do
+					if (v71 == (0 - 0)) then
+						if v1.Notifications then
+							game.StarterGui:SetCore("SendNotification", {Title="Script",Text="[Warning] New Enemy Spawned! Applied hitboxes.",Icon="",Duration=(8 - 5)});
+						end
+						v12(v36);
+						break;
+					end
+				end
+				break;
+			end
+		end
+	end
+end
+task.spawn(function()
+	game.Workspace.DescendantAdded:Connect(v13);
+end);
+local v14 = v0.CreateLib("FRONTLINES", "DarkTheme");
+local v15 = v14:NewTab("ESP Settings");
+local v16 = v15:NewSection("ESP Configuration");
+v16:NewToggle("Enable ESP", "Toggle ESP on/off", function(v37)
+	local v38 = 0 - 0;
+	local v39;
+	while true do
+		if (v38 == (442 - (416 + 26))) then
+			v39 = 0;
+			while true do
+				if (v39 == (0 - 0)) then
+					v1.ESPEnabled = v37;
+					v3:Toggle(v37);
+					break;
+				end
+			end
+			break;
+		end
+	end
+end);
+v16:NewToggle("ESP Boxes", "Show boxes around enemies", function(v40)
+	local v41 = 0 + 0;
+	while true do
+		if (v41 == (14 - (9 + 5))) then
+			v1.ESPBoxes = v40;
+			v3.Boxes = v40;
+			break;
+		end
+	end
+end);
+v16:NewToggle("ESP Names", "Show enemy names", function(v42)
+	v1.ESPNames = v42;
+	v3.Names = v42;
+end);
+v16:NewToggle("ESP Tracers", "Show tracers to enemies", function(v45)
+	v1.ESPTracers = v45;
+	v3.Tracers = v45;
+end);
+v16:NewColorPicker("ESP Color", "Change ESP color", v1.ESPColor, function(v48)
+	v1.ESPColor = v48;
+end);
+local v17 = v14:NewTab("Hitbox Settings");
+local v18 = v17:NewSection("Hitbox Configuration");
+v18:NewToggle("Enable Hitbox", "Toggle hitbox expansion", function(v50)
+	v1.HitboxEnabled = v50;
+end);
+v18:NewSlider("Hitbox Size X", "Adjust hitbox X size", 88 - 38, 439 - (145 + 293), function(v52)
+	v1.HitboxSize = Vector3.new(v52, v1.HitboxSize.Y, v1.HitboxSize.Z);
+end);
+v18:NewSlider("Hitbox Size Y", "Adjust hitbox Y size", 480 - (44 + 386), 1487 - (998 + 488), function(v54)
+	v1.HitboxSize = Vector3.new(v1.HitboxSize.X, v54, v1.HitboxSize.Z);
+end);
+v18:NewSlider("Hitbox Size Z", "Adjust hitbox Z size", 16 + 34, 1 + 0, function(v56)
+	v1.HitboxSize = Vector3.new(v1.HitboxSize.X, v1.HitboxSize.Y, v56);
+end);
+v18:NewSlider("Transparency", "Adjust hitbox transparency (0=visible, 100=invisible)", 872 - (201 + 571), 1138 - (116 + 1022), function(v58)
+	v1.Transparency = v58 / (416 - 316);
+end);
+local v19 = v17:NewSection("Quick Presets");
+v19:NewButton("Small Hitbox (5x5x5)", "Set hitbox to small size", function()
+	v1.HitboxSize = Vector3.new(1935 - (1869 + 61), 3 + 2, 18 - 13);
+end);
+v19:NewButton("Medium Hitbox (10x10x10)", "Set hitbox to medium size", function()
+	v1.HitboxSize = Vector3.new(35 - 25, 869 - (814 + 45), 24 - 14);
+end);
+v19:NewButton("Large Hitbox (20x20x20)", "Set hitbox to large size", function()
+	v1.HitboxSize = Vector3.new(2 + 18, 27 - 7, 20);
+end);
+v19:NewButton("Huge Hitbox (30x30x30)", "Set hitbox to huge size", function()
+	v1.HitboxSize = Vector3.new(29 + 1, 11 + 19, 1001 - (140 + 831));
+end);
+local v20 = v14:NewTab("Misc");
+local v21 = v20:NewSection("Other Settings");
+v21:NewToggle("Enemy Spawn Notifications", "Get notified when enemies spawn", function(v64)
+	v1.Notifications = v64;
+end);
+v21:NewButton("Refresh All Hitboxes", "Reapply hitboxes to all enemies", function()
+	for v68, v69 in pairs(workspace:GetDescendants()) do
+		if ((v69.Name == "soldier_model") and v69:IsA("Model") and not v69:FindFirstChild("friendly_marker")) then
+			v12(v69);
+		end
+	end
+	game.StarterGui:SetCore("SendNotification", {Title="Script",Text="All hitboxes refreshed!",Icon="",Duration=(888 - (261 + 624))});
+end);
+local v22 = v20:NewSection("Information");
+v22:NewLabel("Script Version: 2.0");
+v22:NewLabel("Target: soldier_model");
+v22:NewLabel("Excludes: friendly_marker");
+v22:NewKeybind("Toggle UI", "Toggle the UI visibility", Enum.KeyCode.RightControl, function()
+	v0:ToggleUI();
+end);
+local v23 = os.clock();
+local v24 = v23 - v2;
+local v25;
+if (v24 < (4 - 1)) then
+	v25 = "fast";
+elseif (v24 < (1085 - (1020 + 60))) then
+	v25 = "acceptable";
+else
+	v25 = "slow";
+end
