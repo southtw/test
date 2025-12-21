@@ -1,11 +1,14 @@
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+local tpenabled = false
+local tpdelay = 0.1
 local enabled = false
 local fireInterval = 0.1
 
--- paths
 local potionPaths = {
+    "Speed Of Lighting",
     "Small Haste Potion",
     "Small Luck Potion",
     "Big Haste Potion",
@@ -14,64 +17,13 @@ local potionPaths = {
     "Pot Of Greed"
 }
 
--- gui
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "nigger"
-screenGui.ResetOnSpawn = false
-screenGui.Parent = playerGui
-local mainFrame = Instance.new("Frame")
-mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 200, 0, 120)
-mainFrame.Position = UDim2.new(0.5, -100, 0.1, 0)
-mainFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-mainFrame.BorderSizePixel = 0
-mainFrame.Active = true
-mainFrame.Draggable = true
-mainFrame.Parent = screenGui
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 8)
-corner.Parent = mainFrame
-local title = Instance.new("TextLabel")
-title.Name = "Title"
-title.Size = UDim2.new(1, 0, 0, 35)
-title.Position = UDim2.new(0, 0, 0, 0)
-title.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-title.BorderSizePixel = 0
-title.Text = "collect potion NIGGER"
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.TextSize = 16
-title.Font = Enum.Font.GothamBold
-title.Parent = mainFrame
-local titleCorner = Instance.new("UICorner")
-titleCorner.CornerRadius = UDim.new(0, 8)
-titleCorner.Parent = title
-local toggleButton = Instance.new("TextButton")
-toggleButton.Name = "ToggleButton"
-toggleButton.Size = UDim2.new(0, 160, 0, 40)
-toggleButton.Position = UDim2.new(0.5, -80, 0, 50)
-toggleButton.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
-toggleButton.BorderSizePixel = 0
-toggleButton.Text = "OFF"
-toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggleButton.TextSize = 18
-toggleButton.Font = Enum.Font.GothamBold
-toggleButton.Parent = mainFrame
-local buttonCorner = Instance.new("UICorner")
-buttonCorner.CornerRadius = UDim.new(0, 6)
-buttonCorner.Parent = toggleButton
-local statusLabel = Instance.new("TextLabel")
-statusLabel.Name = "Status"
-statusLabel.Size = UDim2.new(1, -20, 0, 20)
-statusLabel.Position = UDim2.new(0, 10, 0, 95)
-statusLabel.BackgroundTransparency = 1
-statusLabel.Text = "Status: Disabled"
-statusLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-statusLabel.TextSize = 12
-statusLabel.Font = Enum.Font.Gotham
-statusLabel.TextXAlignment = Enum.TextXAlignment.Left
-statusLabel.Parent = mainFrame
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 
--- fire proximity prompts
+local Window = Library.CreateLib("Anime huzz rng", "DarkTheme")
+
+local MainTab = Window:NewTab("Main")
+local MainSection = MainTab:NewSection("Automation")
+
 local function fireProximityPrompts()
     while enabled do
         for _, potionName in ipairs(potionPaths) do
@@ -94,37 +46,55 @@ local function fireProximityPrompts()
     end
 end
 
--- toggle
-toggleButton.MouseButton1Click:Connect(function()
-    enabled = not enabled
+MainSection:NewToggle("Collect Potions", "Automatically collects all potions", function(state)
+    enabled = state
     
     if enabled then
-        toggleButton.Text = "ON"
-        toggleButton.BackgroundColor3 = Color3.fromRGB(50, 220, 50)
-        statusLabel.Text = "Status: Active"
-        statusLabel.TextColor3 = Color3.fromRGB(50, 220, 50)
-        
         task.spawn(fireProximityPrompts)
     else
-        toggleButton.Text = "OFF"
-        toggleButton.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
-        statusLabel.Text = "Status: Disabled"
-        statusLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
     end
 end)
 
-toggleButton.MouseEnter:Connect(function()
-    if enabled then
-        toggleButton.BackgroundColor3 = Color3.fromRGB(60, 240, 60)
+local function atp()
+    while tpenabled do
+        local success, err = pcall(function()
+            local target = workspace.s.Part36
+            local proximityPrompt = target.ProximityPrompt
+            
+            if target and proximityPrompt then
+
+                humanoidRootPart.CFrame = target.CFrame
+
+                task.wait(0.05)
+
+                fireproximityprompt(proximityPrompt)
+
+                task.wait(farmDelay)
+            end
+        end)
+        
+        if not success then
+            task.wait(1)
+        end
+    end
+end
+
+MainSection:NewToggle("Orb Luck", "Automatically orb luck", function(state)
+    tpenabled = state
+    
+    if tpenabled then
+        spawn(atp)
     else
-        toggleButton.BackgroundColor3 = Color3.fromRGB(240, 60, 60)
     end
 end)
 
-toggleButton.MouseLeave:Connect(function()
-    if enabled then
-        toggleButton.BackgroundColor3 = Color3.fromRGB(50, 220, 50)
-    else
-        toggleButton.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
-    end
+local SettingsTab = Window:NewTab("Settings")
+local SettingsSection = SettingsTab:NewSection("Configuration")
+
+SettingsSection:NewSlider("Collection Speed", "Adjust delay between collections", 1, 0.01, function(value)
+    fireInterval = value
+end)
+
+SettingsSection:NewSlider("TP Delay", "Adjust delay between tp cycles", 1, 0.1, function(value)
+    farmDelay = value / 10
 end)
